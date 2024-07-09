@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input[type="text"], 
+        .form-group textarea, 
+        .form-group input[type="email"], 
+        .form-group input[type="number"], 
+        .form-group input[type="date"], 
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .btn1 {
+            margin-left: 43%;
+            padding: 15px 15px;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: rgb(35, 144, 208);
+            border-radius: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn1:hover {
+            background-color: rgb(30, 130, 190);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: green; font-size: 40px;">RESUME</h1>
+    <form action="{% url 'index' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <!-- Personal Information -->
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="locality">Locality:</label>
+                <input type="text" id="locality" name="locality">
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state">
+            </div>
+            <div class="form-group">
+                <label for="phone_no">Phone Number:</label>
+                <input type="text" id="phone_no" name="phone_no">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="profile_image">Profile Image:</label>
+                <input type="file" id="profile_image" name="profile_image">
+            </div>
+            <div class="form-group">
+                <label for="about_you">About You:</label>
+                <textarea id="about_you" name="about_you"></textarea>
+            </div>
+
+            <!-- Skills -->
+            <h2>Skills</h2>
+            <div class="form-group">
+                <label for="skill1">Skill 1:</label>
+                <input type="text" id="skill1" name="skills[]">
+            </div>
+            <div class="form-group">
+                <label for="skill2">Skill 2:</label>
+                <input type="text" id="skill2" name="skills[]">
+            </div>
+            <div class="form-group">
+                <label for="skill3">Skill 3:</label>
+                <input type="text" id="skill3" name="skills[]">
+            </div>
+            <div class="form-group">
+                <label for="skill4">Skill 4:</label>
+                <input type="text" id="skill4" name="skills[]">
+            </div>
+            <div class="form-group">
+                <label for="skill5">Skill 5:</label>
+                <input type="text" id="skill5" name="skills[]">
+            </div>
+            <!--<small>Enter up to 5 skills</small>-->
+
+
+            <!-- Education -->
+            <h2>Education</h2>
+            <div id="education-container">
+                <div class="form-group">
+                    <label for="inst_name_1">Institution Name:</label>
+                    <input type="text" id="inst_name_1" name="inst_name[]">
+                    <label for="passing_year_1">Year:</label>
+                    <input type="text" id="passing_year_1" name="passing_year[]">
+                    <label for="study_1"> Degree Obtained: </label>
+                    <input type="text" id="study_1" name="study[]">
+                </div>
+            </div>
+            <button type="button" onclick="addEducation()">Add More Education</button>
+            
+            <!-- Experience -->
+            <h2>Experience</h2>
+            <div id="experience-container">
+                <div class="form-group">
+                    <label for="job_title_1">Job Title:</label>
+                    <input type="text" id="job_title_1" name="job_title[]">
+                    <label for="duration_in_months_1">Duration (in months):</label>
+                    <input type="text" id="duration_in_months_1" name="duration_in_months[]">
+                    <label for="description_1">Description:</label>
+                    <input type="text" id="description_1" name="description[]">
+                </div>
+            </div>
+            <button type="button" onclick="addExperience()">Add More Experience</button>
+
+            <button type="submit" class="btn1">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        function addEducation() {
+            var educationContainer = document.getElementById("education-container");
+            var newEducationId = educationContainer.children.length + 1;
+            var educationHTML = `
+                <div class="form-group">
+                    <label for="inst_name_${newEducationId}">Institution Name:</label>
+                    <input type="text" id="inst_name_${newEducationId}" name="inst_name[]">
+                    <label for="passing_year_${newEducationId}">Year:</label>
+                    <input type="text" id="passing_year_${newEducationId}" name="passing_year[]">
+                    <label for="study_${newEducationId}">Degree Obtained:</label>
+                    <input type="text" id="study_${newEducationId}" name="study[]">
+                </div>`;
+            educationContainer.insertAdjacentHTML('beforeend', educationHTML);
+        }
+
+        function addExperience() {
+            var experienceContainer = document.getElementById("experience-container");
+            var newExperienceId = experienceContainer.children.length + 1;
+            var experienceHTML = `
+                <div class="form-group">
+                    <label for="job_title_${newExperienceId}">Job Title:</label>
+                    <input type="text" id="job_title_${newExperienceId}" name="job_title[]">
+                    <label for="duration_in_months_${newExperienceId}">Duration (in months):</label>
+                    <input type="text" id="duration_in_months_${newExperienceId}" name="duration_in_months[]">
+                    <label for="description_${newExperienceId}">Description:</label>
+                    <input type="text" id="description_${newExperienceId}" name="description[]">
+                </div>`;
+            experienceContainer.insertAdjacentHTML('beforeend', experienceHTML);
+        }
+    </script>
+    
+</body>
+</html>
